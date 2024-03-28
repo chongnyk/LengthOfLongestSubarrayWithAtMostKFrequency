@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxSubarrayLength(vector<int>& nums, int k) {
+        int windowLength = 0;
+        int maxLength = 0;
+        unordered_map<int, int> freq;
+        int nextFreq;
+        int left = 0, right = 0; //elements from [left, right) form a subarray window, with windowLength as its size
+        while(right < nums.size()){
+            if(freq.find(nums[right]) == freq.end()){
+                nextFreq = 0;
+                freq[nums[right]] = 0;
+            }
+            else{
+                nextFreq = freq[nums[right]];
+            }
+            if(nextFreq < k){ 
+                freq[nums[right++]]++;
+                windowLength++;
+                maxLength = max(maxLength, windowLength);
+            }
+            else if(nextFreq == k){
+                freq[nums[left++]]--;
+                windowLength--;
+            }
+        }
+        return maxLength;
+    }
+};
